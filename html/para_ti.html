@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tengo algo especial para ti 💗</title>
+
+  <!-- Tipografías (si no hay internet, se usan las de respaldo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+  <style>
+/* =========================================================
+   CARTA DE AMOR · style.css
+   Paleta: rosa pastel, rojo y blanco
+   ========================================================= */
+
+:root {
+  --rosa-claro: #ffe3ec;
+  --rosa-pastel: #ffc2d6;
+  --rosa: #ff8fb1;
+  --rojo: #d6264f;
+  --rojo-hondo: #9d1235;
+  --blanco: #fffafb;
+  --tinta: #6b1a33;
+
+  --font-script: "Pinyon Script", "Segoe Script", cursive;
+  --font-texto: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: var(--font-texto);
+  color: var(--tinta);
+  background: linear-gradient(160deg, var(--rosa-claro) 0%, var(--rosa-pastel) 55%, #ffaac6 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Fondo: estrellas y corazones ---------- */
+#bg-layer {
+  position: fixed; inset: 0; overflow: hidden;
+  pointer-events: none; z-index: 0;
+}
+
+.star {
+  position: absolute; border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px 1px rgba(255, 255, 255, .9);
+  animation: twinkle var(--t, 3s) ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: .25; transform: scale(.8); }
+  50%      { opacity: 1;   transform: scale(1.3); }
+}
+
+.float-heart {
+  position: absolute; bottom: -40px;
+  color: var(--c, var(--rojo));
+  opacity: 0;
+  animation: floatUp var(--dur, 10s) linear forwards;
+}
+@keyframes floatUp {
+  0%   { transform: translate(0, 0) rotate(-8deg); opacity: 0; }
+  10%  { opacity: .75; }
+  50%  { transform: translate(var(--sway, 30px), -55vh) rotate(8deg); }
+  100% { transform: translate(calc(var(--sway, 30px) * -1), -115vh) rotate(-8deg); opacity: 0; }
+}
+
+/* ---------- Pantallas ---------- */
+.screen {
+  position: relative; z-index: 1;
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 18px;
+  text-align: center;
+}
+
+/* ---------- Pantalla 1: carta cerrada ---------- */
+#lock-screen { transition: opacity .7s ease, transform .7s ease; }
+#lock-screen.leaving { opacity: 0; transform: scale(.94) translateY(-14px); }
+
+.lock-title {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 8vw, 3.4rem);
+  line-height: 1.15;
+  color: var(--rojo);
+  margin-top: 30px;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, .8);
+}
+.lock-text {
+  font-size: clamp(1.15rem, 4vw, 1.45rem);
+  font-style: italic;
+  margin: 10px 0 22px;
+  max-width: 30ch;
+}
+
+#lock-form {
+  display: flex; flex-direction: column; gap: 14px;
+  width: min(340px, 100%);
+}
+
+input[type="password"] {
+  font: inherit; font-size: 1.2rem; text-align: center;
+  padding: 13px 18px;
+  color: var(--tinta);
+  background: var(--blanco);
+  border: 2px solid var(--rosa);
+  border-radius: 999px;
+  outline: none;
+  transition: border-color .3s, box-shadow .3s;
+}
+input[type="password"]::placeholder { color: #c08a9b; font-style: italic; }
+input[type="password"]:focus {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 5px rgba(214, 38, 79, .15);
+}
+input.shake { animation: shake .5s; border-color: var(--rojo); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-9px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+
+button {
+  font: inherit; font-size: 1.2rem; font-weight: 600;
+  cursor: pointer;
+  padding: 13px 26px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff5c85, var(--rojo));
+  border: none; border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(214, 38, 79, .35);
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s;
+}
+button:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(214, 38, 79, .45); filter: brightness(1.05); }
+button:active { transform: translateY(0) scale(.97); }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--rojo-hondo); outline-offset: 3px; }
+button.ghost {
+  background: var(--blanco); color: var(--rojo);
+  border: 2px solid var(--rosa);
+  box-shadow: 0 6px 16px rgba(214, 38, 79, .15);
+}
+
+/* ---------- Sobre (lo más memorable de la pantalla 1) ---------- */
+.envelope {
+  position: relative;
+  width: min(290px, 74vw);
+  aspect-ratio: 3 / 2;
+  animation: bob 4s ease-in-out infinite;
+  filter: drop-shadow(0 18px 24px rgba(157, 18, 53, .25));
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+.env-paper, .env-flap, .env-front { position: absolute; inset: 0; }
+
+.env-paper {
+  background: var(--blanco);
+  border-radius: 8px;
+  inset: 6% 8% 0;
+  z-index: 1;
+  box-shadow: 0 -4px 14px rgba(157, 18, 53, .18);
+  /* renglones de la hoja */
+  background:
+    repeating-linear-gradient(180deg, transparent 0 15px, rgba(255, 143, 177, .55) 15px 16px) 12% 38px / 76% 56% no-repeat,
+    var(--blanco);
+}
+.env-flap {
+  background: linear-gradient(180deg, #ffa7c0, var(--rosa));
+  clip-path: polygon(0 0, 100% 0, 50% 62%);
+  border-radius: 8px 8px 0 0;
+  transform-origin: top center;
+  transition: transform .7s ease, z-index 0s .35s;
+  z-index: 3;
+}
+.env-front {
+  background: linear-gradient(180deg, var(--rosa-pastel), #ff9fbc);
+  clip-path: polygon(0 100%, 0 0, 50% 58%, 100% 0, 100% 100%);
+  border-radius: 8px;
+  z-index: 2;
+}
+.envelope::before { /* cuerpo del sobre */
+  content: ""; position: absolute; inset: 0;
+  background: #ffb3cb; border-radius: 8px; z-index: 0;
+}
+.env-seal {
+  position: absolute; z-index: 4;
+  left: 50%; top: 52%;
+  width: 54px; height: 54px;
+  transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  font-size: 1.7rem; color: #fff;
+  background: radial-gradient(circle at 35% 30%, #ff6b8e, var(--rojo-hondo));
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
+  animation: beat 1.6s ease-in-out infinite;
+  transition: opacity .3s;
+}
+@keyframes beat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  15%      { transform: translate(-50%, -50%) scale(1.15); }
+  30%      { transform: translate(-50%, -50%) scale(1); }
+  45%      { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Sobre abierto */
+.envelope.open .env-seal  { opacity: 0; animation: none; }
+.envelope.open .env-flap  { transform: rotateX(180deg); z-index: 0; }
+/* La hoja sale del sobre y luego pasa AL FRENTE (z-index 5) */
+.envelope.open .env-paper { animation: paperOut 1.5s ease .45s forwards; }
+@keyframes paperOut {
+  0%   { transform: translateY(0);                 z-index: 1; }
+  45%  { transform: translateY(-48%);              z-index: 1; }
+  46%  { transform: translateY(-48%);              z-index: 5; }
+  100% { transform: translateY(-22%) scale(1.12);  z-index: 5; }
+}
+
+/* ---------- Notificación de error ---------- */
+#toast {
+  position: fixed; z-index: 50;
+  top: 18px; left: 50%;
+  transform: translate(-50%, -150%);
+  width: max-content; max-width: calc(100vw - 32px);
+  padding: 14px 24px;
+  font-size: 1.2rem; font-weight: 600; text-align: center;
+  color: var(--rojo-hondo);
+  background: var(--blanco);
+  border: 2px solid var(--rojo);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(214, 38, 79, .3);
+  opacity: 0; pointer-events: none;
+}
+#toast.show { animation: toastIn 3.2s cubic-bezier(.2, 1.2, .3, 1) forwards; }
+@keyframes toastIn {
+  0%   { transform: translate(-50%, -150%); opacity: 0; }
+  10%  { transform: translate(-50%, 0);     opacity: 1; }
+  14%  { transform: translate(-54%, 0); }
+  18%  { transform: translate(-46%, 0); }
+  22%  { transform: translate(-50%, 0); }
+  85%  { transform: translate(-50%, 0);     opacity: 1; }
+  100% { transform: translate(-50%, -150%); opacity: 0; }
+}
+
+/* ---------- Explosión de corazones ---------- */
+#burst { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
+.burst-heart {
+  position: absolute; left: 50%; top: 45%;
+  color: var(--c, var(--rojo));
+  animation: burst 1.6s ease-out forwards;
+}
+@keyframes burst {
+  0%   { transform: translate(-50%, -50%) scale(.2); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.3) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ---------- Pantalla 2: la carta ---------- */
+#letter-screen { justify-content: flex-start; padding-top: 36px; padding-bottom: 50px; }
+
+.letter {
+  width: min(680px, 100%);
+  padding: clamp(26px, 6vw, 52px) clamp(20px, 6vw, 56px);
+  background:
+    linear-gradient(var(--blanco), var(--blanco)) padding-box,
+    linear-gradient(135deg, var(--rosa), var(--rojo), var(--rosa)) border-box;
+  border: 3px solid transparent;
+  border-radius: 22px;
+  box-shadow: 0 24px 50px rgba(157, 18, 53, .25);
+  opacity: 0; transform: translateY(30px) scale(.97);
+  transition: opacity 1s ease, transform 1s ease;
+}
+#letter-screen.visible .letter { opacity: 1; transform: none; }
+
+.letter-heart {
+  font-size: 2.4rem; color: var(--rojo);
+  animation: beat2 1.5s ease-in-out infinite;
+}
+@keyframes beat2 {
+  0%, 100% { transform: scale(1); }
+  20%      { transform: scale(1.22); }
+  40%      { transform: scale(1); }
+  60%      { transform: scale(1.12); }
+}
+.letter-title {
+  font-family: var(--font-script); font-weight: 400;
+  font-size: clamp(2.3rem, 9vw, 3.6rem); line-height: 1.15;
+  color: var(--rojo); margin: 6px 0 22px;
+}
+
+.letter-body { text-align: left; font-size: clamp(1.18rem, 3.8vw, 1.4rem); line-height: 1.65; }
+.letter-body p { margin-bottom: 1.05em; }
+.letter-body p.sign {
+  font-family: var(--font-script); font-size: 2rem; text-align: right;
+  color: var(--rojo); margin-top: 1em;
+}
+/* Los párrafos aparecen uno a uno al abrir la carta */
+.letter-body p, .quotes li {
+  opacity: 0; transform: translateY(10px);
+  animation: appear .9s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes appear { to { opacity: 1; transform: none; } }
+
+.quotes { list-style: none; margin: 18px 0 10px; display: grid; gap: 12px; }
+.quotes li {
+  font-style: italic; font-size: clamp(1.1rem, 3.6vw, 1.3rem);
+  padding: 12px 16px;
+  background: var(--rosa-claro);
+  border-left: 4px solid var(--rojo);
+  border-radius: 0 14px 14px 0;
+}
+
+.counter-wrap { margin-top: 26px; }
+.counter-label { font-size: 1.3rem; font-style: italic; margin-bottom: 12px; }
+.counter { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.counter div {
+  padding: 10px 2px;
+  background: linear-gradient(180deg, var(--rosa-claro), var(--rosa-pastel));
+  border-radius: 14px;
+}
+.counter span { display: block; font-size: clamp(1.3rem, 5vw, 2rem); font-weight: 600; color: var(--rojo); }
+.counter small { font-size: clamp(.78rem, 2.6vw, 1rem); }
+
+.actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+@media (max-width: 420px) {
+  .counter { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Respeta a quien prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+</style>
+  <!-- ============ CONFIGURACIÓN: cambia SOLO lo que está entre comillas ============ -->
+  <script>
+    window.CARTA_CONFIG = {
+      PASSWORD: "031026",              // Contraseña secreta
+      START_DATE: "2026-10-03T00:00:00",   // Fecha en que empezaron (AAAA-MM-DDTHH:MM:SS)
+      AUDIO_SRC: "music/Aventura - Inmortal (Letra_Lyrics) [5SXGsVceTqM].mp3"         // Canción (archivo junto a este HTML)
+    };
+  </script>
+</head>
+<body>
+
+  <!-- Capa de fondo: estrellas y corazones flotando (los crea script.js) -->
+  <div id="bg-layer" aria-hidden="true"></div>
+
+  <!-- Notificación de error (aparece solo si la contraseña es incorrecta) -->
+  <div id="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- Contenedor de la explosión de corazones -->
+  <div id="burst" aria-hidden="true"></div>
+
+  <!-- ============ PANTALLA 1: CARTA CERRADA ============ -->
+  <main id="lock-screen" class="screen">
+    <div class="envelope" id="envelope" aria-hidden="true">
+      <div class="env-paper"></div>
+      <div class="env-flap"></div>
+      <div class="env-front"></div>
+      <div class="env-seal">❤</div>
+    </div>
+
+    <h1 class="lock-title">esto es para ti mi negra <br>💙</h1>
+    <p class="lock-text">Pero primero ponga la contraseña, se que te la sabes </p>
+
+    <form id="lock-form" autocomplete="off">
+      <label for="password" class="sr-only">Contraseña secreta</label>
+      <input type="password" id="password" placeholder="Escribe la contraseña…" required>
+      <button type="submit" id="open-btn">Abrir mi corazón 💌</button>
+    </form>
+  </main>
+
+  <!-- ============ PANTALLA 2: LA CARTA ============ -->
+  <!-- Se deja vacía y oculta. El contenido solo se crea con la contraseña correcta. -->
+  <section id="letter-screen" class="screen" hidden></section>
+
+  <!-- Plantilla inerte: el navegador no la muestra hasta que JS la use -->
+  <template id="letter-template">
+    <article class="letter">
+      <div class="letter-heart">❤</div>
+      <h2 class="letter-title">Para mi negra💙</h2>
+
+      <div class="letter-body" id="letter-body"></div>
+
+      <ul class="quotes" id="quotes"></ul>
+
+      <div class="counter-wrap">
+        <p class="counter-label">Llevamos juntos</p>
+        <div class="counter" id="counter">
+          <div><span id="c-years">0</span><small>años</small></div>
+          <div><span id="c-months">0</span><small>meses</small></div>
+          <div><span id="c-days">0</span><small>días</small></div>
+          <div><span id="c-hours">0</span><small>horas</small></div>
+          <div><span id="c-minutes">0</span><small>min</small></div>
+          <div><span id="c-seconds">0</span><small>seg</small></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="music-btn" class="ghost">🎵 Reproducir música</button>
+        <button type="button" id="close-btn">Volver a cerrar mi carta</button>
+      </div>
+    </article>
+  </template>
+
+  <script>
+/* =========================================================
+   CARTA DE AMOR · script.js
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1) CONFIGURACIÓN — cambia aquí lo que quieras
+   --------------------------------------------------------- */
+const CONFIG = Object.assign({
+  PASSWORD: "031026",
+  START_DATE: "2026-10-03T00:00:00",
+  AUDIO_SRC: "music/Aventura - Inmortal (Letra_Lyrics) [5SXGsVceTqM].mp3",
+  ERROR_MESSAGE: "❌ Error, amorcito. Intenta de nuevo 💗",
+  TOAST_MS: 3200
+}, window.CARTA_CONFIG || {});
+
+/* Declaración de amor: un párrafo por elemento. Edítala con tus palabras. */
+const LETTER_PARAGRAPHS = [
+  "No sé si alguna vez te he dicho con suficientes palabras lo feliz que me hace tenerte en mi vida, pero hoy quiero intentarlo. Quiero que te tomes un momentico para leer esto y que, por medio de cada palabra, puedas sentir un poquito de todo el cariño que tengo por ti.",
+  "Hoy cumplimos nuestro primer mes juntos y, aunque parezca poquito tiempo, para mí ha sido un mes lleno de momentos que guardo con muchísimo cariño. Un mes en el que he podido descubrir un poquito más de ti, conocer tus formas, tus ocurrencias, tus detalles y esas pequeñas cosas que, sin darte cuenta, hacen que me gustes cada día más.",
+  "A veces me pongo a pensar en lo bonito que es coincidir con alguien y encontrar en esa persona tantas razones para sonreír. Y entonces pienso en ti, mi negra. En esa manera tan tuya de alegrarme los días, en lo bonito que se siente recibir un mensaje tuyo, en las ganas que me dan de contarte cualquier cosa y en lo especial que se ha vuelto compartir mis momentos contigo.",
+  "Quiero darte las gracias. Gracias por permitirme entrar en tu vida, por compartir conmigo una parte de ti, por cada muestra de cariño y por hacerme sentir que este comienzo vale muchísimo la pena. Quizás no te imaginas lo feliz que me hacen algunos de tus pequeños detalles, pero créeme que los valoro más de lo que te puedes imaginar.",
+  "También quiero que sepas que no espero que nuestra historia sea perfecta. No quiero que seamos dos personas que nunca se equivocan, sino dos personas que sepan escucharse, comprenderse, respetarse y cuidarse. Quiero que podamos celebrar juntos los días buenos y apoyarnos cuando las cosas no salgan como esperamos. Quiero que siempre tengamos la confianza de hablar, de reírnos, de aprender y de seguir creciendo juntos.",
+  "No te voy a prometer un mundo perfecto, mi negra, pero sí quiero ofrecerte sentimientos sinceros, cariño, respeto y muchas ganas de hacer las cosas bonitas contigo. Quiero seguir conquistándote incluso cuando ya haya pasado mucho tiempo, seguir teniendo detalles contigo, seguir buscando motivos para sacarte una sonrisa y nunca permitir que la costumbre nos haga olvidar lo bonito que es tenernos.",
+  "Y si algo quiero pedirle a la vida, es que nos regale muchísimos meses más, que podamos vivir experiencias inolvidables y que algún día miremos hacia atrás y nos sintamos orgullosos de todo lo que hemos construido.",
+];
+const SIGNATURE = "Tuyo para siempre, con todo mi corazón 💗";
+
+/* Frases románticas (se muestran debajo de la carta) */
+const QUOTES = [
+  "“No necesito que todos mis días sean perfectos, si en muchos de ellos puedo tenerte a ti“",
+  "“Entre tantas casualidades bonitas de la vida, tú eres mi favorita“",
+  "“No sé qué tan larga será nuestra historia, pero tengo muchas ganas de que sea contigo“",
+  "“Si volviera a empezar mil veces, me encantaría que la vida volviera a cruzar nuestros caminos“",
+];
+
+/* ---------------------------------------------------------
+   2) REFERENCIAS AL DOM
+   --------------------------------------------------------- */
+const bgLayer    = document.getElementById("bg-layer");
+const toast      = document.getElementById("toast");
+const burst      = document.getElementById("burst");
+const lockScreen = document.getElementById("lock-screen");
+const lockForm   = document.getElementById("lock-form");
+const input      = document.getElementById("password");
+const envelope   = document.getElementById("envelope");
+const letterScr  = document.getElementById("letter-screen");
+const template   = document.getElementById("letter-template");
+
+/* ---------------------------------------------------------
+   3) FONDO: ESTRELLAS Y CORAZONES FLOTANDO
+   --------------------------------------------------------- */
+const rand = (min, max) => Math.random() * (max - min) + min;
+const HEART_COLORS = ["#d6264f", "#ff5c85", "#ff8fb1", "#ffffff", "#9d1235"];
+const HEART_CHARS  = ["❤", "♥", "💗", "💕"];
+
+function createStars(count = 70) {
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement("span");
+    star.className = "star";
+    const size = rand(2, 5);
+    star.style.cssText =
+      `left:${rand(0, 100)}%; top:${rand(0, 100)}%; width:${size}px; height:${size}px;` +
+      `--t:${rand(2, 5)}s; --d:${rand(0, 4)}s;`;
+    bgLayer.appendChild(star);
+  }
+}
+
+function createFloatingHeart() {
+  const h = document.createElement("span");
+  h.className = "float-heart";
+  h.textContent = HEART_CHARS[Math.floor(rand(0, HEART_CHARS.length))];
+  h.style.cssText =
+    `left:${rand(0, 100)}%; font-size:${rand(14, 34)}px;` +
+    `--c:${HEART_COLORS[Math.floor(rand(0, HEART_COLORS.length))]};` +
+    `--dur:${rand(8, 15)}s; --sway:${rand(-50, 50)}px;`;
+  h.addEventListener("animationend", () => h.remove()); // limpia el DOM
+  bgLayer.appendChild(h);
+}
+
+createStars();
+setInterval(createFloatingHeart, 650);
+for (let i = 0; i < 6; i++) createFloatingHeart();
+
+/* ---------------------------------------------------------
+   4) NOTIFICACIÓN DE ERROR
+   --------------------------------------------------------- */
+let toastTimer;
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.remove("show");
+  void toast.offsetWidth;            // reinicia la animación si ya estaba visible
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), CONFIG.TOAST_MS);
+}
+
+/* ---------------------------------------------------------
+   5) CONTRASEÑA
+   --------------------------------------------------------- */
+/** Quita espacios, tildes y mayúsculas para comparar contraseñas */
+function normalize(text) {
+  return String(text).normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+}
+
+lockForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (normalize(input.value) === normalize(CONFIG.PASSWORD)) {
+    unlockLetter();
+  } else {
+    showToast(CONFIG.ERROR_MESSAGE);
+    input.classList.remove("shake");
+    void input.offsetWidth;
+    input.classList.add("shake");
+    input.select();
+  }
+});
+
+/** Lluvia de corazones desde el centro de la pantalla */
+function heartBurst(count = 36) {
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement("span");
+    h.className = "burst-heart";
+    h.textContent = HEART_CHARS[Math.floor(rand(0, HEART_CHARS.length))];
+    const angle = rand(0, Math.PI * 2);
+    const dist = rand(120, Math.min(window.innerWidth, 520));
+    h.style.cssText =
+      `font-size:${rand(18, 42)}px; --c:${HEART_COLORS[Math.floor(rand(0, 4))]};` +
+      `--dx:${Math.cos(angle) * dist}px; --dy:${Math.sin(angle) * dist - 80}px; --rot:${rand(-40, 40)}deg;`;
+    h.addEventListener("animationend", () => h.remove());
+    burst.appendChild(h);
+  }
+}
+
+/** Abre el sobre y muestra la carta */
+function unlockLetter() {
+  input.disabled = true;
+  heartBurst();
+  envelope.classList.add("open");
+  startMusic();                       // el clic del usuario permite iniciar el audio
+
+  setTimeout(() => {
+    lockScreen.classList.add("leaving");
+    setTimeout(() => {
+      lockScreen.hidden = true;
+      renderLetter();                 // el contenido se crea SOLO ahora
+      letterScr.hidden = false;
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => letterScr.classList.add("visible"));
+      startCounter();
+      heartBurst(22);
+    }, 700);
+  }, 2700);
+}
+
+/** Construye la carta a partir de la plantilla y los textos de arriba */
+function renderLetter() {
+  letterScr.innerHTML = "";
+  letterScr.appendChild(template.content.cloneNode(true));
+
+  const body = document.getElementById("letter-body");
+  LETTER_PARAGRAPHS.forEach((text, i) => {
+    const p = document.createElement("p");
+    p.textContent = text;
+    p.style.setProperty("--delay", `${0.5 + i * 0.7}s`);
+    body.appendChild(p);
+  });
+  const sign = document.createElement("p");
+  sign.className = "sign";
+  sign.textContent = SIGNATURE;
+  sign.style.setProperty("--delay", `${0.5 + LETTER_PARAGRAPHS.length * 0.7}s`);
+  body.appendChild(sign);
+
+  const quotesList = document.getElementById("quotes");
+  QUOTES.forEach((q, i) => {
+    const li = document.createElement("li");
+    li.textContent = q;
+    li.style.setProperty("--delay", `${1 + LETTER_PARAGRAPHS.length * 0.7 + i * 0.4}s`);
+    quotesList.appendChild(li);
+  });
+
+  document.getElementById("close-btn").addEventListener("click", closeLetter);
+  document.getElementById("music-btn").addEventListener("click", toggleMusic);
+  updateMusicButton();
+}
+
+/** Vuelve a cerrar la carta: borra el contenido y regresa al sobre */
+function closeLetter() {
+  stopCounter();
+  stopMusic();
+  letterScr.classList.remove("visible");
+
+  setTimeout(() => {
+    letterScr.hidden = true;
+    letterScr.innerHTML = "";         // el contenido desaparece del DOM
+    lockScreen.hidden = false;
+    envelope.classList.remove("open");
+    input.disabled = false;
+    input.value = "";
+    void lockScreen.offsetWidth;
+    lockScreen.classList.remove("leaving");
+    window.scrollTo(0, 0);
+    input.focus();
+  }, 600);
+}
+
+/* ---------------------------------------------------------
+   6) CONTADOR DE TIEMPO JUNTOS
+   --------------------------------------------------------- */
+let counterTimer;
+
+function daysInMonth(year, month) {            // month: 0-11
+  return new Date(year, month + 1, 0).getDate();
+}
+
+function updateCounter() {
+  const start = new Date(CONFIG.START_DATE);
+  const now = new Date();
+  if (isNaN(start) || now < start) return;
+
+  let y = now.getFullYear() - start.getFullYear();
+  let mo = now.getMonth() - start.getMonth();
+  let d = now.getDate() - start.getDate();
+  let h = now.getHours() - start.getHours();
+  let mi = now.getMinutes() - start.getMinutes();
+  let s = now.getSeconds() - start.getSeconds();
+
+  // "Pedir prestado" de la unidad mayor cuando una resta es negativa
+  if (s < 0)  { s += 60; mi--; }
+  if (mi < 0) { mi += 60; h--; }
+  if (h < 0)  { h += 24; d--; }
+  if (d < 0)  { d += daysInMonth(now.getFullYear(), now.getMonth() - 1); mo--; }
+  if (mo < 0) { mo += 12; y--; }
+
+  const values = { years: y, months: mo, days: d, hours: h, minutes: mi, seconds: s };
+  for (const [key, value] of Object.entries(values)) {
+    const el = document.getElementById(`c-${key}`);
+    if (el) el.textContent = value;
+  }
+}
+
+function startCounter() {
+  updateCounter();
+  clearInterval(counterTimer);
+  counterTimer = setInterval(updateCounter, 1000);
+}
+function stopCounter() { clearInterval(counterTimer); }
+
+/* ---------------------------------------------------------
+   7) MÚSICA DE FONDO (play / pausa)
+   Usa CONFIG.AUDIO_SRC. Si el archivo no existe, suena una
+   melodía suave generada por el navegador (respaldo).
+   --------------------------------------------------------- */
+const audio = new Audio();
+audio.loop = true;
+audio.volume = 0.6;
+
+let wantPlaying = false;                 // ¿el usuario quiere música?
+let useSynth = !CONFIG.AUDIO_SRC;        // ¿usamos la melodía de respaldo?
+
+if (!useSynth) {
+  audio.src = CONFIG.AUDIO_SRC;
+  audio.addEventListener("error", () => {
+    useSynth = true;
+    if (wantPlaying) startSynth();
+  });
+}
+
+function startMusic() {
+  wantPlaying = true;
+  if (useSynth) {
+    startSynth();
+  } else {
+    audio.play().catch(() => { useSynth = true; startSynth(); });
+  }
+  updateMusicButton();
+}
+
+function stopMusic() {
+  wantPlaying = false;
+  audio.pause();
+  stopSynth();
+  updateMusicButton();
+}
+
+function toggleMusic() { wantPlaying ? stopMusic() : startMusic(); }
+
+function updateMusicButton() {
+  const btn = document.getElementById("music-btn");
+  if (btn) btn.textContent = wantPlaying ? "⏸ Pausar música" : "🎵 Reproducir música";
+}
+
+/* --- Melodía de respaldo (Web Audio API) --- */
+let audioCtx, synthTimer, synthStep = 0;
+const CHORDS = [                          // Do – La menor – Fa – Sol
+  [261.63, 329.63, 392.00, 523.25],
+  [220.00, 261.63, 329.63, 440.00],
+  [174.61, 220.00, 261.63, 349.23],
+  [196.00, 246.94, 293.66, 392.00]
+];
+const PATTERN = [0, 1, 2, 3, 2, 1, 2, 1];
+
+function playNote(freq, duration, volume) {
+  const t = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(volume, t + 0.04);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(t);
+  osc.stop(t + duration + 0.05);
+}
+
+function startSynth() {
+  if (synthTimer) return;
+  audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+  audioCtx.resume();
+  synthTimer = setInterval(() => {
+    const chord = CHORDS[Math.floor(synthStep / 8) % CHORDS.length];
+    if (synthStep % 8 === 0) playNote(chord[0] / 2, 3, 0.14);   // nota grave
+    playNote(chord[PATTERN[synthStep % 8]], 1.4, 0.1);
+    synthStep++;
+  }, 450);
+}
+
+function stopSynth() {
+  clearInterval(synthTimer);
+  synthTimer = null;
+}
+
+</script>
+</body>
+</html>
